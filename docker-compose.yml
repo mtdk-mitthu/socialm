@@ -3,12 +3,10 @@ version: '3.8'
 services:
   web:
     build: .
-    # command: We use a placeholder here because the project doesn't exist yet.
-    # Once you run the setup steps below, this command will be:
-    command: gunicorn socialm.wsgi:application --bind 0.0.0.0:8000
+    command: ["gunicorn", "bookmarks.wsgi:application", "--bind", "0.0.0.0:8000"]
     volumes:
       - .:/app
-      - static_data:/app/staticfiles/
+      - static_data:/app/bookmarks/staticfiles/
     depends_on:
       - db
     environment:

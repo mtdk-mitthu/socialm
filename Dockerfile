@@ -17,5 +17,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project files
 COPY . .
 
-# We will overwrite this command in docker-compose, but this is a good default
-CMD ["gunicorn", "socialm.wsgi:application", "--bind", "0.0.0.0:8000"]
+WORKDIR /app/bookmarks
+
+CMD ["gunicorn", "bookmarks.wsgi:application", "--bind", "0.0.0.0:8000"]

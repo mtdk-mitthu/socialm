@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'socialm.urls'
+ROOT_URLCONF = 'bookmarks.urls'
 
 TEMPLATES = [
     {
@@ -68,7 +68,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'socialm.wsgi.application'
+WSGI_APPLICATION = 'bookmarks.wsgi.application'
 
 
 # Database
