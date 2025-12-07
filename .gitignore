@@ -1,0 +1,6 @@
+echo "__pycache__/" > .gitignore
+echo "*.pyc" >> .gitignore
+echo "db.sqlite3" >> .gitignore
+echo ".DS_Store" >> .gitignore
+echo "postgres_data/" >> .gitignore
+echo "static_data/" >> .gitignore
