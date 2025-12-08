@@ -3,7 +3,11 @@ version: '3.8'
 services:
   web:
     build: .
-    command: ["gunicorn", "bookmarks.wsgi:application", "--bind", "0.0.0.0:8000"]
+    # its for production purpose
+    # command: ["gunicorn", "bookmarks.wsgi:application", "--bind", "0.0.0.0:8000"]
+    
+    # its for development purpose
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
     volumes:
       - .:/app
       - static_data:/app/bookmarks/staticfiles/
