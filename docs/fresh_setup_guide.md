@@ -133,8 +133,11 @@ Once the structure was fixed and Docker containers were rebuilt cleanly:
 docker compose up --build -d
 docker compose logs -f
   sudo service docker restart
-
   pip install -r requirements.txt
+  pip freeze > requirements.txt
 
-pip freeze > requirements.txt
+
+docker compose exec web python manage.py makemigrations
+docker-compose exec web python manage.py migrate
+
 
