@@ -5,3 +5,7 @@ gunicorn
 django-taggit
 django-cors-headers
 requests
+social-auth-app-django
+django-extensions
+werkzeug
+pyOpenSSL

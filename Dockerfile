@@ -19,4 +19,4 @@ COPY . .
 
 WORKDIR /app/bookmarks
 
-CMD ["gunicorn", "bookmarks.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "bookmarks.wsgi:application", "--bind", "0.0.0.0:8080"]

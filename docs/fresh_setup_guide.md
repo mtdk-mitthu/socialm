@@ -134,11 +134,15 @@ Build: docker compose up --build -d
 Terminal Log: docker compose logs -f
 Stop only:	docker compose stop
 Restart:	docker compose restart
+start:  docker compose up
+
 pip install -r requirements.txt
 pip freeze > requirements.txt
 
 
 docker compose exec web python manage.py makemigrations
 docker-compose exec web python manage.py migrate
+
+docker compose exec web 
 
 

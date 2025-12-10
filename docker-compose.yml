@@ -3,11 +3,15 @@ version: '3.8'
 services:
   web:
     build: .
-    # its for production purpose
-    # command: ["gunicorn", "bookmarks.wsgi:application", "--bind", "0.0.0.0:8000"]
+    # HTTPS Development Command (RunServerPlus with SSL)
+    command: ["python", "manage.py", "runserver_plus", "--cert-file", "cert.crt", "0.0.0.0:8000"]
     
-    # its for development purpose
-    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    # OLD COMMAND (Standard HTTP)
+    # command: ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+    
+    ports:
+      - "8000:8000"
+
     volumes:
       - .:/app
       - static_data:/app/bookmarks/staticfiles/
@@ -19,6 +23,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - DB_HOST=db
 
+  # You can leave Nginx here, but we are bypassing it for now
   nginx:
     image: nginx:alpine
     ports:
