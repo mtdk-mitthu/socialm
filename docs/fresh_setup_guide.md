@@ -119,7 +119,7 @@ Once the structure was fixed and Docker containers were rebuilt cleanly:
 
     ```bash
     git add .
-    git commit -m "Renamed project to bookmarks and restructured folders"
+    git commit -m "Change password views"
     git push origin main
     ```
 
@@ -128,3 +128,6 @@ Once the structure was fixed and Docker containers were rebuilt cleanly:
   * **Branch:** `main`
   * **Docker Status:** Up and running (db, web, nginx).
   * **Recent Commit:** `Renamed project to bookmarks and restructured folders` (Hash: `40642c8`).
+
+
+  sudo service docker restart
