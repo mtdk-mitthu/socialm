@@ -130,11 +130,12 @@ Once the structure was fixed and Docker containers were rebuilt cleanly:
   * **Recent Commit:** `Renamed project to bookmarks and restructured folders` (Hash: `40642c8`).
 
 
-docker compose up --build -d
-docker compose logs -f
-  sudo service docker restart
-  pip install -r requirements.txt
-  pip freeze > requirements.txt
+Build: docker compose up --build -d
+Terminal Log: docker compose logs -f
+Stop only:	docker compose stop
+Restart:	docker compose restart
+pip install -r requirements.txt
+pip freeze > requirements.txt
 
 
 docker compose exec web python manage.py makemigrations
