@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}{{ image.title }}{% endblock %}
+
+{% block content %}
+  <h1>{{ image.title }}</h1>
+  
+  <div class="image-detail">
+    {# Main saved image #}
+    <img src="{{ image.image.url }}" class="image-detail-img" style="max-width: 100%;">
+  </div>
+
+  {% with total_likes=image.users_like.count %}
+    <div class="image-info">
+      <div>
+        <span class="count">
+          <span class="total">{{ total_likes }}</span>
+          like{{ total_likes|pluralize }}
+        </span>
+      </div>
+      <div class="description">
+        {{ image.description|linebreaks }}
+      </div>
+    </div>
+  {% endwith %}
+{% endblock %}
