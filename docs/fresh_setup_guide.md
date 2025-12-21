@@ -145,4 +145,38 @@ docker-compose exec web python manage.py migrate
 
 docker compose exec web 
 
+go last modified code when we write wrong many code
+git reset --hard HEAD
+git clean -fd
+
+
+we should work on branch like if want adding some feature or experiment
+git checkout -b experiment
+
+"
+git checkout main
+git pull origin main
+git checkout -b experiment-feature
+
+"
+
+problem hole again back
+git checkout main
+
+"
+git checkout main
+git pull origin main
+git merge experiment-feature
+"
+
+code push into the github
+"
+git push origin main
+"
+
+
+we can delete the sub branch later
+"
+git branch -d experiment-feature
+"
 
