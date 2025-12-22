@@ -5,6 +5,9 @@ from django.utils.text import slugify
 from .forms import ImageCreateForm
 from .models import Image
 
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+
 @login_required
 def image_create(request):
     if request.method == 'POST':
@@ -27,3 +30,24 @@ def image_detail(request, id, slug):
     image = get_object_or_404(Image, id=id) 
     return render(request, 'images/image/detail.html', 
                   {'section': 'images', 'image': image})
+
+
+@login_required 
+def image_like(request):
+    image_id = request.POST.get('id')
+    action = request.POST.get('action')
+    
+    if image_id and action:
+        try:
+            image = Image.objects.get(id=image_id)
+            if action == 'like':
+                # Django's ManyToMany field handles duplicates automatically
+                image.users_like.add(request.user)
+            else:
+                image.users_like.remove(request.user)
+            return JsonResponse({'status': 'ok'})
+        except Image.DoesNotExist:
+            # Better to return an error status for debugging
+            return JsonResponse({'status': 'error', 'message': 'Image not found'})
+            
+    return JsonResponse({'status': 'error', 'message': 'Invalid data'})
