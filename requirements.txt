@@ -10,3 +10,4 @@ django-extensions
 werkzeug
 pyOpenSSL
 python-decouple
+easy-thumbnails
