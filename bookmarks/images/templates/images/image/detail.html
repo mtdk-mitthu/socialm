@@ -5,22 +5,36 @@
 {% block content %}
   <h1>{{ image.title }}</h1>
   
-  <div class="image-detail">
-    {# Main saved image #}
-    <img src="{{ image.image.url }}" class="image-detail-img" style="max-width: 100%;">
-  </div>
+  {# Main Image Display #}
+  <img src="{{ image.image.url }}" class="image-detail" style="max-width: 100%; height: auto;">
 
   {% with total_likes=image.users_like.count %}
     <div class="image-info">
       <div>
         <span class="count">
-          <span class="total">{{ total_likes }}</span>
+          <span class="total">{{ total_likes }}</span> 
           like{{ total_likes|pluralize }}
         </span>
       </div>
+      
       <div class="description">
         {{ image.description|linebreaks }}
       </div>
+    </div>
+
+    {# Users who liked this image section #}
+    <div class="image-likes">
+      <h3>People who like this image:</h3>
+      {% for user in image.users_like.all %}
+        <div class="user-like">
+          {% if user.profile.photo %}
+            <img src="{{ user.profile.photo.url }}" style="width: 50px; height: 50px; border-radius: 50%;">
+          {% endif %}
+          <p>{{ user.first_name|default:user.username }}</p>
+        </div>
+      {% empty %}
+        <p>Nobody likes this image yet.</p>
+      {% endfor %}
     </div>
   {% endwith %}
 {% endblock %}

@@ -30,5 +30,4 @@ class Image(models.Model):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        # Fallback to 'image' string if slug is empty to prevent NoReverseMatch
         return reverse('images:detail', args=[self.id, self.slug or 'image'])
