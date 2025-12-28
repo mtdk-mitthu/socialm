@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from django.contrib import messages
 
@@ -105,3 +106,34 @@ def edit(request):
             'profile_form': profile_form
         },
     )
+
+
+    @login_required
+    def image_list(request):
+        images = Image.objects.all()
+        paginator = Paginator(images, 8)
+        page = request.GET.get('page')
+        images_only = request.GET.get('images_only')
+        
+        try:
+            images = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer deliver the first page
+            images = paginator.page(1)
+        except EmptyPage:
+            if images_only:
+                # If AJAX request and page out of range return an empty page
+                return HttpResponse('')
+            # If page out of range return last page of results
+            images = paginator.page(paginator.num_pages)
+        
+        if images_only:
+            # Return only the partial HTML for AJAX infinite scroll requests
+            return render(request,
+                        'images/image/list_images.html',
+                        {'section': 'images', 'images': images})
+        
+        # Return the full page for normal requests
+        return render(request,
+                    'images/image/list.html',
+                    {'section': 'images', 'images': images})

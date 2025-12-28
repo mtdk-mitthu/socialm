@@ -2,20 +2,19 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils.text import slugify
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.http import require_POST
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import ImageCreateForm
 from .models import Image
 
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-
 @login_required
-def image_create(request):
+def image_create(request): 
     if request.method == 'POST':
         form = ImageCreateForm(data=request.POST)
         if form.is_valid():
             new_image = form.save(commit=False)
             new_image.user = request.user
-            # Logic: If form didn't provide a slug, create it from title now
             if not new_image.slug:
                 new_image.slug = slugify(new_image.title)
             new_image.save()
@@ -31,23 +30,39 @@ def image_detail(request, id, slug):
     return render(request, 'images/image/detail.html', 
                   {'section': 'images', 'image': image})
 
-
-@login_required 
+@login_required
+@require_POST
 def image_like(request):
     image_id = request.POST.get('id')
     action = request.POST.get('action')
-    
     if image_id and action:
         try:
             image = Image.objects.get(id=image_id)
             if action == 'like':
-                # Django's ManyToMany field handles duplicates automatically
                 image.users_like.add(request.user)
             else:
                 image.users_like.remove(request.user)
             return JsonResponse({'status': 'ok'})
         except Image.DoesNotExist:
-            # Better to return an error status for debugging
-            return JsonResponse({'status': 'error', 'message': 'Image not found'})
-            
-    return JsonResponse({'status': 'error', 'message': 'Invalid data'})
+            return JsonResponse({'status': 'error'})
+    return JsonResponse({'status': 'error'})
+
+@login_required
+def image_list(request):
+    images = Image.objects.all()
+    paginator = Paginator(images, 8)
+    page = request.GET.get('page')
+    images_only = request.GET.get('images_only')
+    try:
+        images = paginator.page(page)
+    except PageNotAnInteger:
+        images = paginator.page(1)
+    except EmptyPage:
+        if images_only:
+            return HttpResponse('')
+        images = paginator.page(paginator.num_pages)
+    if images_only:
+        return render(request, 'images/image/list_images.html', 
+                      {'section': 'images', 'images': images})
+    return render(request, 'images/image/list.html', 
+                  {'section': 'images', 'images': images})
