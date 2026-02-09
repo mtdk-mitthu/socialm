@@ -11,3 +11,4 @@ werkzeug
 pyOpenSSL
 python-decouple
 easy-thumbnails
+sorl-thumbnail

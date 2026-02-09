@@ -1,8 +1,8 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.contrib import messages
 
 from .forms import (
@@ -13,6 +13,7 @@ from .forms import (
 )
 from .models import Profile
 
+User = get_user_model()
 
 def user_login(request):
     if request.method == 'POST':
@@ -56,8 +57,7 @@ def register(request):
             new_user.set_password(user_form.cleaned_data['password'])
             # Save the User object
             new_user.save()
-            # Create the user profile
-            Profile.objects.create(user=new_user)
+            
             return render(
                 request,
                 'account/register_done.html',
@@ -93,11 +93,10 @@ def edit(request):
             )
         else:
             messages.error(request, 'Error updating your profile')
-
-
     else:
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=request.user.profile)
+        
     return render(
         request,
         'account/edit.html',
@@ -108,32 +107,53 @@ def edit(request):
     )
 
 
-    @login_required
-    def image_list(request):
-        images = Image.objects.all()
-        paginator = Paginator(images, 8)
-        page = request.GET.get('page')
-        images_only = request.GET.get('images_only')
-        
-        try:
-            images = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer deliver the first page
-            images = paginator.page(1)
-        except EmptyPage:
-            if images_only:
-                # If AJAX request and page out of range return an empty page
-                return HttpResponse('')
-            # If page out of range return last page of results
-            images = paginator.page(paginator.num_pages)
-        
+@login_required
+def image_list(request):
+    images = [] 
+    
+    paginator = Paginator(images, 8)
+    page = request.GET.get('page')
+    images_only = request.GET.get('images_only')
+    
+    try:
+        images = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer deliver the first page
+        images = paginator.page(1)
+    except EmptyPage:
         if images_only:
-            # Return only the partial HTML for AJAX infinite scroll requests
-            return render(request,
-                        'images/image/list_images.html',
-                        {'section': 'images', 'images': images})
-        
-        # Return the full page for normal requests
+            # If AJAX request and page out of range return an empty page
+            return HttpResponse('')
+        # If page out of range return last page of results
+        images = paginator.page(paginator.num_pages)
+    
+    if images_only:
+        # Return only the partial HTML for AJAX infinite scroll requests
         return render(request,
-                    'images/image/list.html',
+                    'images/image/list_images.html',
                     {'section': 'images', 'images': images})
+    
+    # Return the full page for normal requests
+    return render(request,
+                'images/image/list.html',
+                {'section': 'images', 'images': images})
+
+
+@login_required
+def user_list(request):
+    users = User.objects.filter(is_active=True)
+    return render(
+        request,
+        'account/user/list.html',
+        {'section': 'people', 'users': users}
+    )
+
+
+@login_required
+def user_detail(request, username):
+    user = get_object_or_404(User, username=username, is_active=True)
+    return render(
+        request,
+        'account/user/detail.html',
+        {'section': 'people', 'user': user}
+    )
