@@ -1,289 +1,509 @@
-@import url(//fonts.googleapis.com/css?family=Muli);
-
-body {
-    margin:0;
-    padding:0;
-    font-family:helvetica, sans-serif;
+:root {
+    /* Modern Color Palette */
+    --bg-color: #F8FAFC;       /* Cool very light gray backdrop */
+    --surface: #FFFFFF;        /* Pure white for cards */
+    --text-main: #0F172A;      /* Deep slate for high contrast */
+    --text-muted: #64748B;     /* Soft slate for dates/secondary text */
+    --border: #E2E8F0;         /* Barely there borders */
+    
+    /* Brand Accent - Vibrant Emerald Green */
+    --brand: #10B981;
+    --brand-hover: #059669;
+    --brand-light: #D1FAE5;
+    
+    /* Soft, modern shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-card: 0 10px 25px -5px rgb(0 0 0 / 0.05);
 }
 
-p {
-    line-height: 1.8;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    padding-top: 100px; /* Space for fixed navbar */
 }
 
 a {
-    color:#12c064;
-    text-decoration:none;
+    color: var(--brand);
+    text-decoration: none;
+    transition: all 0.2s ease;
 }
 
-a:hover {
-    color:#00a74f;
+/* =========================================
+   1. GLASSMORPHISM NAVBAR
+   ========================================= */
+.glass-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 1000;
 }
 
-h1, h2, h3, h4, h5 , h6 { font-family: 'Muli', sans-serif; font-weight:normal; }
-
-h1 {
-    border-bottom:1px solid #bbb;
-    padding:0 0 10px 0;
-    margin:10px 0 20px 0;
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
 }
 
-h2 {
-    margin:30px 0 20px;
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
 }
 
-ol {
-    line-height:1.5;
+.brand-logo svg {
+    color: var(--brand);
 }
 
-#header {
-    padding:10px 100px;
-    font-size:14px;
-    background:#12c064;
-    color:#fff;
-    border-bottom:4px solid #1cdf78;
-    overflow:auto;
+.center-nav {
+    display: flex;
+    gap: 32px;
 }
 
-#header .logo {
-    font-family: 'Muli', sans-serif;
-    float:left;
-    color:#f3f7cc;
-    font-size:20px;
-    margin-right:10%;
+.center-nav a {
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 15px;
+    position: relative;
 }
 
-#header ul.menu {
-    list-style:none;
-    float:left;
-    margin:0;
-    padding:0;
-}
-#header ul.menu li {
-    float:left;
-    padding:4px 10px;
+.center-nav a:hover, .center-nav a.active {
+    color: var(--text-main);
 }
 
-#header ul.menu li.selected a, #header ul.menu li.selected a:hover {
-    color:#1b6d32;
-    font-weight:bold;
+.center-nav a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background-color: var(--brand);
+    border-radius: 50%;
 }
 
-#header a {
-    color:#f3f7cc;
-}
-#header a:hover {
-    color:#fff;
-}
-
-#header .user {
-    float:right;
-    padding-top:4px;
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
-#header .user form {
-    display:inline;
-    float:right;
+.user-greeting {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 14px;
 }
 
-#header .user button {
-    background:none;
-    color:#f3f7cc;
-    border:none;
-    cursor:pointer;
-    float:left;
-    display:inline;
+.nav-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--brand-light);
 }
 
-#content {
-    padding:30px 100px;
+/* =========================================
+   2. BUTTONS
+   ========================================= */
+.btn {
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    display: inline-block;
 }
 
-/* forms */
-form {
-    overflow:auto;
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+    background: var(--brand);
+    color: white;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
 }
 
-form p {
-    width:100%;
-    overflow:auto;
+.btn-primary:hover {
+    background: var(--brand-hover);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+    color: white;
 }
 
-label {
-    float:left;
-    clear:both;
-    color:#333;
-    margin-bottom:4px;
-}
-input, textarea {
-    clear:both;
-    float:left;
-    margin:0 0 10px;
-    background:#efefef;
-    border:0;
-    padding:6px 10px;
-    font-size:14px;
-}
-input[type=submit], a.button {
-    font-weight:bold;
-    background:#12c064;
-    color:#fff;
-    padding:10px 20px;
-    font-size:14px;
-    text-transform:uppercase;
-}
-.errorlist {
-    color:#cc0033;
-    float:left;
-    clear:both;
-    padding-left:10px;
-}
-.helptext {
-    margin:0 0 20px 0;
-    color:#aaa;
-    clear:both;
-    float:left;
-    font-size:13px;
-}
-/* messages */
-ul.messages {
-    margin:10px 100px;
-    padding:0;
-    list-style-type:
-    none;
-}
-ul.messages li.success,
-ul.messages li.warning,
-ul.messages li.error,
-ul.messages li.info {
-    margin:0;
-    padding:14px 20px;
-    list-style:none;
-    color:#fff;
+.btn-logout {
+    background: var(--surface);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
 }
 
-ul.messages li.success { background:#81ce81; }
-ul.messages li.success a { color:#0ac33e; }
-
-ul.messages li.error { background:#a30029; color:#e9828e; }
-ul.messages li.error a { color:#e9828e; }
-
-ul.messages li.info { background:#faffae; color:#696b4e; }
-ul.messages li.info a { color:#1586de; }
-
-ul.messages li.warning { background:#de9404; }
-ul.messages li.warning a { color:#f49000; }
-
-ul.messages li a.close {
-    margin:0;
-    float:right;
-    opacity:1;
-    border:0;
-    box-shadow:none;
-    text-shadow:none;
+.btn-logout:hover {
+    background: #F1F5F9;
+    color: var(--text-main);
 }
 
-.login-form {
-    float:left;
+/* =========================================
+   3. MAIN CANVAS & TYPOGRAPHY
+   ========================================= */
+.main-canvas {
+    max-width: 1200px;
+    margin: 0 auto 40px auto;
+    padding: 0 24px;
 }
 
-/* social-auth */
-.social {
-    float:right;
-}
-.social li {
-    list-style:none;
-    padding:10px 20px;
-    margin:0 0 10px 0;
-}
-.social li a {
-    width:100%;
-    height:100%;
-    display:block;
-    color:#fff;
-}
-.social li.google { background:#de1710; }
-
-
-/* images */
-
-.image-preview, .image-detail {
-    max-width:300px;
-    float:left;
-    margin:0 20px 20px 0;
-}
-.image-detail { margin-top:20px; }
-.image-info div {
-    padding:20px 0;
-    overflow:auto;
-}
-.count {
-    color:#aaa;
-    border:3px solid #bbb;
-    border-radius:26px;
-    padding:10px 20px;
-    margin:20px 10px 0;
-}
-a.like, a.follow { float:right; margin-top:-8px; }
-
-#image-list { overflow:hidden; }
-#image-list .image {
-    float:left;
-    width:220px;
-    height:300px;
-    margin:0 10px 10px 10px;
-    border-top:8px solid #12c064;
-    background:#eee;
-}
-#image-list img { width:220px; height:220px; }
-#image-list .info { padding:10px; }
-#image-list .info a { color:#333; }
-.image-likes div {
-    float:left;
-    width:auto;
-    padding:10px;
-    text-align:center;
-}
-.image-likes img {
-    width:120px;
-    height:120px;
-    border-radius:50%;
+h1, h2, h3 {
+    color: var(--text-main);
+    letter-spacing: -0.5px;
 }
 
-/* users */
-#people-list img {
-    width:180px;
-    height:180px;
-    border-radius:50%;
-    margin-bottom:20px;
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
-#people-list .user {
-    width:180px;
-    float:left;
-    overflow:auto;
-    padding:10px;
-}
-#people-list .info { text-align:center; }
-img.user-detail {
-    border-radius:50%;
-    float:left;
-}
-.profile-info {
-    float:left;
-    overflow:auto;
-    margin-right:20px;
-}
-.image-container { margin-top:40px; }
 
-/* actions */
+.page-subtitle {
+    color: var(--text-muted);
+    font-size: 16px;
+    margin-bottom: 40px;
+}
+
+/* =========================================
+   4. DASHBOARD LAYOUT (UPDATED)
+   ========================================= */
+.dashboard-wrapper {
+    display: flex;
+    flex-wrap: wrap; /* Safe stacking on small screens */
+    gap: 40px;
+    align-items: flex-start;
+}
+
+/* The Left/Middle Column */
+.dashboard-main {
+    flex: 2;
+    min-width: 300px;
+}
+
+.welcome-text {
+    color: var(--text-muted);
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.dashboard-main h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-main);
+}
+
+/* The Premium Feed Card */
+.activity-section {
+    background: var(--surface);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border);
+}
+
+.activity-section h2 {
+    font-size: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.empty-feed {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* The Right Column Sidebar */
+.dashboard-sidebar {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px; /* Space between the two cards */
+    position: sticky;
+    top: 100px; /* Keeps sidebar floating nicely as you scroll */
+}
+
+/* Individual Tools & Account Cards */
+.sidebar-card {
+    background: var(--surface);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border);
+}
+
+.sidebar-card h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.sidebar-card p {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.sidebar-links {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-links li {
+    margin-bottom: 12px;
+}
+
+.sidebar-links a {
+    font-weight: 600;
+    color: var(--brand);
+}
+
+.sidebar-links a:hover {
+    color: var(--brand-hover);
+    text-decoration: underline;
+}
+
+/* Fix for the Bookmark button */
+.sidebar-card a.button {
+    display: inline-block;
+    background: var(--brand);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    transition: all 0.2s ease;
+}
+
+.sidebar-card a.button:hover {
+    background: var(--brand-hover);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+    color: white;
+}
+
+/* =========================================
+   5. ACTIVITY FEED ITEMS
+   ========================================= */
 .action {
-    clear:both;
-    overflow:auto;
+    display: flex;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px dashed var(--border);
 }
+
+.action:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
 .action .images {
-    float:left;
-    margin:0 10px 10px 0;
+    display: flex;
+    gap: -10px; /* Overlaps images slightly for a cool effect */
 }
+
+.action .item-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--surface);
+    box-shadow: var(--shadow-sm);
+    z-index: 2;
+}
+
+.action .images a + a .item-img {
+    border-radius: 12px; /* Soft square */
+    width: 64px;
+    height: 64px;
+    border: 1px solid var(--border);
+    margin-left: 12px;
+    z-index: 1;
+}
+
+.action .info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.action .info p {
+    font-size: 15px;
+    color: var(--text-main);
+}
+
+.action .info a {
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.action .info a:hover {
+    color: var(--brand);
+}
+
 .action .date {
-    font-style:italic;
-    color:#ccc;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+/* =========================================
+   6. PEOPLE GRID
+   ========================================= */
+#people-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 24px;
+}
+
+#people-list .user {
+    background: var(--surface);
+    padding: 30px 20px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#people-list .user:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-card);
+}
+
+#people-list img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 3px solid var(--border);
+}
+
+/* =========================================
+   7. IMAGE GRID
+   ========================================= */
+#image-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+#image-list .image {
+    background: var(--surface);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#image-list .image:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-card);
+}
+
+#image-list img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+}
+
+#image-list .info {
+    padding: 16px 20px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+}
+
+/* Image Detail View Fix */
+.image-detail {
+    max-width: 500px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 20px;
+}
+
+/* =========================================
+   8. FLOATING TOAST ALERTS
+   ========================================= */
+.toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 9999;
+}
+
+.toast {
+    background: var(--surface);
+    color: var(--text-main);
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 300px;
+    border-left: 4px solid var(--brand);
+    animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast.error { border-left-color: #EF4444; }
+
+.close-toast {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }

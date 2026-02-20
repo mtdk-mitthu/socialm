@@ -1,41 +1,47 @@
 {% load thumbnail %}
-
 {% with user=action.user profile=action.user.profile %}
-<div class="action">
-  <div class="images">
-    {% if profile.photo %}
-      {% thumbnail profile.photo "80x80" crop="100%" as im %}
-      <a href="{{ user.get_absolute_url }}">
-        <img src="{{ im.url }}" alt="{{ user.get_full_name }}" class="item-img">
-      </a>
-    {% endif %}
 
-    {% if action.target %}
-      {% with target=action.target %}
-        {% if target.image %}
-          {% thumbnail target.image "80x80" crop="100%" as im %}
-          <a href="{{ target.get_absolute_url }}">
-            <img src="{{ im.url }}" class="item-img">
-          </a>
-        {% endif %}
-      {% endwith %}
+<div class="action-card">
+  <div class="action-left">
+    {% if profile.photo %}
+      {% thumbnail profile.photo "60x60" crop="100%" as im %}
+        <a href="{{ user.get_absolute_url }}">
+          <img src="{{ im.url }}" class="avatar">
+        </a>
+      {% endthumbnail %}
     {% endif %}
   </div>
 
-  <div class="info">
-    <p>
-      <span class="date">{{ action.created|timesince }} ago</span>
-      <br />
-      <a href="{{ user.get_absolute_url }}">
-        {{ user.first_name }}
+  <div class="action-body">
+    <div class="action-header">
+      <a href="{{ user.get_absolute_url }}" class="username">
+        {{ user.first_name|default:user.username }}
       </a>
-      {{ action.verb }}
+      <span class="action-verb">{{ action.verb }}</span>
+
       {% if action.target %}
         {% with target=action.target %}
-          <a href="{{ target.get_absolute_url }}">{{ target }}</a>
+          <a href="{{ target.get_absolute_url }}" class="target-link">
+            {{ target }}
+          </a>
         {% endwith %}
       {% endif %}
-    </p>
+    </div>
+
+    <div class="action-meta">
+      {{ action.created|timesince }} ago
+    </div>
+
+    {% if action.target and action.target.image %}
+      {% thumbnail action.target.image "400x300" crop="smart" as im %}
+        <div class="action-image">
+          <a href="{{ action.target.get_absolute_url }}">
+            <img src="{{ im.url }}">
+          </a>
+        </div>
+      {% endthumbnail %}
+    {% endif %}
   </div>
 </div>
+
 {% endwith %}

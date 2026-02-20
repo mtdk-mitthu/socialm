@@ -1,66 +1,75 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>{% block title %}{% endblock %}</title>
-  <link href="{% static "css/base.css" %}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bookmarks{% endblock %}</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
 </head>
 <body>
-  <div id="header">
-    <span class="logo">Bookmarks</span>
-    {% if request.user.is_authenticated %}
-      <ul class="menu">
-        <li {% if section == "dashboard" %}class="selected"{% endif %}>
-          <a href="{% url "dashboard" %}">My dashboard</a>
-        </li>
-        <li {% if section == "images" %}class="selected"{% endif %}>
-          <a href="{% url "images:list" %}">Images</a>
-        </li>
-        <li {% if section == "people" %}class="selected"{% endif %}>
-          <a href="{% url "user_list" %}">People</a>
-        </li>
-      </ul>
+
+    <header class="glass-nav">
+        <div class="nav-container">
+            <a href="/" class="brand-logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+                Bookmarks
+            </a>
+            
+            {% if request.user.is_authenticated %}
+                <nav class="center-nav">
+                    <a href="{% url 'dashboard' %}" class="{% if section == 'dashboard' %}active{% endif %}">Dashboard</a>
+                    <a href="{% url 'images:list' %}" class="{% if section == 'images' %}active{% endif %}">Explore Images</a>
+                    <a href="{% url 'user_list' %}" class="{% if section == 'people' %}active{% endif %}">People</a>
+                </nav>
+
+                <div class="user-actions">
+                    <div class="user-greeting">
+                        {% if request.user.profile.photo %}
+                            <img src="{{ request.user.profile.photo.url }}" class="nav-avatar" alt="Avatar">
+                        {% endif %}
+                        <span>{{ request.user.first_name|default:request.user.username }}</span>
+                    </div>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-logout">Log out</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="user-actions">
+                    <a href="{% url 'login' %}" class="btn btn-primary">Sign In</a>
+                </div>
+            {% endif %}
+        </div>
+    </header>
+
+    {% if messages %}
+        <div class="toast-container">
+            {% for message in messages %}
+                <div class="toast {{ message.tags }}">
+                    {{ message|safe }}
+                    <button class="close-toast" onclick="this.parentElement.remove()">×</button>
+                </div>
+            {% endfor %}
+        </div>
     {% endif %}
 
-    <span class="user">
-      {% if request.user.is_authenticated %}
-        Hello {{ request.user.first_name|default:request.user.username }},
-        <form action="{% url "logout" %}" method="post" style="display:inline;">
-          {% csrf_token %}
-          <button type="submit">Logout</button>
-        </form>
-      {% else %}
-        <a href="{% url "login" %}">Log-in</a>
-      {% endif %}
-    </span>
-  </div>
+    <main class="main-canvas">
+        {% block content %}
+        {% endblock %}
+    </main>
 
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li class="{{ message.tags }}">
-          {{ message|safe }}
-          <a href="#" class="close">x</a>
-        </li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-
-  <div id="content">
-    {% block content %}
-    {% endblock %}
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-
-  <script>
-    const csrftoken = Cookies.get('csrftoken');
-
-    document.addEventListener('DOMContentLoaded', (event) => {
-      // Logic inside the domready block from child templates will be inserted here
-      {% block domready %}
-      {% endblock %}
-    })
-  </script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script>
+        const csrftoken = Cookies.get('csrftoken');
+        document.addEventListener('DOMContentLoaded', (event) => {
+            {% block domready %}{% endblock %}
+        });
+    </script>
 </body>
 </html>

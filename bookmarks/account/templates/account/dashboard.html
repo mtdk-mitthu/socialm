@@ -3,33 +3,47 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-  <h1>Dashboard</h1>
-  <p>Welcome to your dashboard, {{ request.user.first_name|default:request.user.username }}.</p>
+<div class="dashboard-wrapper">
 
-  <div class="dashboard-sections">
-    {# Activity Stream Section #}
-    <div class="activity-stream">
-      <h2>What's happening</h2>
+  <div class="dashboard-main">
+    <h1>Dashboard</h1>
+    <p class="welcome-text">
+      Welcome back,
+      <strong>{{ request.user.first_name|default:request.user.username }}</strong>
+    </p>
+
+    <div class="activity-section">
+      <h2>Activity Feed</h2>
+
       <div id="action-list">
         {% for action in actions %}
           {% include "actions/action/detail.html" %}
         {% empty %}
-          <p>No activity yet. Follow some people to see what they are up to!</p>
+          <div class="empty-feed">
+            No activity yet. Follow users to see updates here.
+          </div>
         {% endfor %}
       </div>
     </div>
+  </div>
 
-    {# Tools & Settings Section #}
-    <div class="dashboard-sidebar">
+  <div class="dashboard-sidebar">
+    <div class="sidebar-card">
       <h3>Tools</h3>
-      <p>Drag the following button to your bookmarks toolbar to bookmark images from other websites:</p>
-      <a href="javascript:{% include 'bookmarklet_launcher.js' %}" class="button">Bookmark it</a>
+      <p>Drag this button to bookmark images from other sites:</p>
+      <a href="javascript:{% include 'bookmarklet_launcher.js' %}" class="button">
+        Bookmark It
+      </a>
+    </div>
 
-      <h3>Account Settings</h3>
-      <p>
-        You can <a href="{% url 'edit' %}">edit your profile</a> or 
-        <a href="{% url 'password_change' %}">change your password</a>.
-      </p>
+    <div class="sidebar-card">
+      <h3>Account</h3>
+      <ul class="sidebar-links">
+        <li><a href="{% url 'edit' %}">Edit Profile</a></li>
+        <li><a href="{% url 'password_change' %}">Change Password</a></li>
+      </ul>
     </div>
   </div>
+
+</div>
 {% endblock %}
