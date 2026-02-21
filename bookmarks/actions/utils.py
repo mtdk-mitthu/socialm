@@ -21,7 +21,6 @@ def create_action(user, verb, target=None):
             target_id=target.id
         )
     
-    # Logic: Only save if no similar action was found in the last 60 seconds
     if not similar_actions.exists():
         action = Action(user=user, verb=verb, target=target)
         action.save()

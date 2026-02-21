@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block title %}Image Ranking{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">Image Ranking</h1>
+  <p class="page-subtitle">The most viewed images in the community.</p>
+
+  <div id="image-list">
+    {% for image in most_viewed %}
+      <div class="image-card" style="position: relative;">
+        
+        <div style="position: absolute; top: 15px; left: 15px; background: var(--brand); color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; z-index: 10; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);">
+          #{{ forloop.counter }}
+        </div>
+        
+        <a href="{{ image.get_absolute_url }}">
+          {% thumbnail image.image "300x300" crop="100%" as im %}
+          <img src="{{ im.url }}" alt="{{ image.title }}" style="width: 100%; height: 250px; object-fit: cover; display: block;">
+        </a>
+        
+        <div class="info" style="padding: 16px 20px; background: var(--surface); border-top: 1px solid var(--border);">
+          <h3 style="font-size: 16px; margin-bottom: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            <a href="{{ image.get_absolute_url }}">{{ image.title }}</a>
+          </h3>
+        </div>
+
+      </div>
+    {% empty %}
+      <p style="color: var(--text-muted); font-style: italic;">No images have been ranked yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

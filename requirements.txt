@@ -11,3 +11,5 @@ werkzeug
 pyOpenSSL
 python-decouple
 easy-thumbnails
+django-debug-toolbar
+redis
