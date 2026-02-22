@@ -46,4 +46,36 @@
   </div>
 
 </div>
+
+<div style="background: var(--surface); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); border: 1px solid var(--border); margin-top: 20px;">
+    <h3 style="margin-top: 0; font-size: 18px; color: var(--text-main); margin-bottom: 20px;">Trending Images</h3>
+    
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+        {% for image in most_viewed %}
+        <a href="{{ image.get_absolute_url }}" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+            
+            <div style="position: relative; width: 65px; height: 65px; flex-shrink: 0;">
+                <div style="position: absolute; top: -6px; left: -6px; background: var(--brand); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 11px; z-index: 10; box-shadow: 0 2px 5px rgba(16, 185, 129, 0.4);">
+                    #{{ forloop.counter }}
+                </div>
+                {% load thumbnail %}
+                {% thumbnail image.image "65x65" crop="100%" as im %}
+                <img src="{{ im.url }}" alt="{{ image.title }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+            </div>
+            
+            <div style="overflow: hidden;">
+                <p style="margin: 0; font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ image.title }}</p>
+                <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">Community favorite</p>
+            </div>
+        </a>
+        {% empty %}
+        <p style="color: var(--text-muted); font-size: 14px; font-style: italic; margin: 0;">No trending images yet.</p>
+        {% endfor %}
+    </div>
+    
+    <a href="{% url 'images:ranking' %}" style="display: block; text-align: center; margin-top: 20px; color: var(--brand); font-weight: 600; font-size: 14px; text-decoration: none;">View Full Ranking &rarr;</a>
+</div>
+
 {% endblock %}
+
+

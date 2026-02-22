@@ -121,6 +121,8 @@ Once the structure was fixed and Docker containers were rebuilt cleanly:
     git add .
     git commit -m "Change password views"
     git push origin main
+
+    git push -u origin feature/action-generic
     ```
 
 ## 5\. Current Status

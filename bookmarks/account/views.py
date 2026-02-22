@@ -11,6 +11,17 @@ from actions.utils import create_action
 
 from images.models import Image  
 
+import redis
+from django.conf import settings
+from images.models import Image
+
+# --- CONNECT TO REDIS ---
+r = redis.Redis(
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT,
+    db=settings.REDIS_DB
+)
+
 from .forms import (
     LoginForm,
     ProfileEditForm,
@@ -52,6 +63,11 @@ def dashboard(request):
         actions = actions.filter(user_id__in=following_ids)
     actions = actions.select_related('user', 'user__profile') .prefetch_related('target')[:10]
         
+    image_ranking = r.zrange('image_ranking', 0, -1, desc=True)[:3] 
+    image_ranking_ids = [int(id) for id in image_ranking]
+    
+    most_viewed = list(Image.objects.filter(id__in=image_ranking_ids))
+    most_viewed.sort(key=lambda x: image_ranking_ids.index(x.id))
 
     return render(
         request,
@@ -59,6 +75,7 @@ def dashboard(request):
         {
             "section": "dashboard",
             "actions": actions,
+            "most_viewed": most_viewed,
         },
     )
 
@@ -212,6 +229,6 @@ def user_follow(request):
 
 
 
-r = redis.Redis(host=settings.REDIS_HOST,
-                port=settings.REDIS_PORT,
-                db=settings.REDIS_DB)
+# r = redis.Redis(host=settings.REDIS_HOST,
+#                 port=settings.REDIS_PORT,
+#                 db=settings.REDIS_DB)
