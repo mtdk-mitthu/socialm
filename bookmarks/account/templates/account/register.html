@@ -1,11 +1,22 @@
 {% extends "base.html" %}
+
 {% block title %}Create an account{% endblock %}
+
 {% block content %}
-<h1>Create an account</h1>
-<p>Please, sign up using the following form:</p>
-<form method="post">
-{{ user_form.as_p }}
-{% csrf_token %}
-<p><input type="submit" value="Create my account"></p>
-</form>
+  <div class="auth-card" style="max-width: 550px;">
+    <h1>Create an account</h1>
+    <p class="subtitle">Please, sign up using the following form:</p>
+
+    <form method="post">
+      {% csrf_token %}
+      
+      {{ user_form.as_p }}
+      
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Create my account</button>
+    </form>
+    
+    <div class="auth-links" style="margin-top: 20px;">
+      <a href="{% url 'login' %}" class="link-secondary">Already have an account? Log in here.</a>
+    </div>
+  </div>
 {% endblock %}

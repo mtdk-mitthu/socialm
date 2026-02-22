@@ -9,6 +9,8 @@ from django.views.decorators.http import require_POST
 from actions.models import Action
 from actions.utils import create_action
 
+from images.models import Image  
+
 from .forms import (
     LoginForm,
     ProfileEditForm,
@@ -210,6 +212,6 @@ def user_follow(request):
 
 
 
-
-
-
+r = redis.Redis(host=settings.REDIS_HOST,
+                port=settings.REDIS_PORT,
+                db=settings.REDIS_DB)
