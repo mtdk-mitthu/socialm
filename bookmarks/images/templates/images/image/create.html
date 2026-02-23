@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Bookmark an image{% endblock %}
+
+{% block content %}
+  <div class="auth-card" style="max-width: 600px;">
+    <h1>Bookmark an image</h1>
+    <p class="subtitle">Add this image to your personal collection.</p>
+    
+    <div style="margin-bottom: 25px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: var(--bg-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <img src="{{ request.GET.url }}" alt="Image preview" style="width: 100%; height: auto; max-height: 350px; display: block; object-fit: contain;">
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+      
+      {{ form.as_p }}
+      
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px; font-size: 16px;">Bookmark it!</button>
+    </form>
+  </div>
+{% endblock %}
